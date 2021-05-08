@@ -5,19 +5,17 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\Email;
 
 class EmailTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function test_example()
-    {
-        $response = $this->get('/');
+    use RefreshDatabase;
 
-        $response->assertStatus(200);
+    public function test_save_email_in_database()
+    {
+        $email = Email::factory()->make();
+        $email->save();
+        $this->assertDatabaseHas('emails', ['id' => $email->id]);
     }
 
     public function test_email_endpoint()

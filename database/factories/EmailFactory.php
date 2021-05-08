@@ -26,7 +26,7 @@ class EmailFactory extends Factory
             'email_address' => $this->faker->email(),
             'message' => $this->faker->realText(200),
             'attachment' => Storage::path('testFile.txt'),
-            'attachment_name' => 'testFile.txt',
+            'attachment_filename' => 'testFile.txt',
             'sent' => $this->faker->randomElement(array(0,1)),
         ];
     }
