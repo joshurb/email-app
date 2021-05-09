@@ -1,9 +1,9 @@
 ##email-app
 
-#DescriptionS
+#Description
 <p>An api driven Laravel app that will receive a JSON payload, generate, and send an email.</p>
 
-##Endpoints
+# Endpoints
 POST /api/send-email will receive a Json payload structured like:
 <pre>{
     "email_address": "example@test.dev",
@@ -30,7 +30,7 @@ GET /api/get-all-emails will return an array of all emails that have been create
 
 GET /api/get-sent-emails will return an array of all emails that have been sent.
 
-##challenges
+# Challenges
 Setting up the endpoints was pretty simple because that is definitely where
 Laravel excels. It is pretty much ready to go, api-wise, after it's running. 
 Setting up the endpoint logic was pretty straightforward, the 2 get endpoints 
