@@ -20,6 +20,7 @@ class EmailResource extends JsonResource
             'message' => $request->message,
             'file_name' => $request->file_name,
             'file' => $request->file,
+            'sent' => $request->sent
         ];
     }
 }

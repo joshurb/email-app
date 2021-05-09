@@ -1,62 +1,52 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+##email-app
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+#DescriptionS
+<p>An api driven Laravel app that will receive a JSON payload, generate, and send an email.</p>
 
-## About Laravel
+##Endpoints
+POST /api/send-email will receive a Json payload structured like:
+<pre>{
+    "email_address": "example@test.dev",
+    "message": "Its a new message!",
+    "attachment": {
+        "file": {
+            "mime": "@file/plain",
+            "data": "dGhpcyBpcyBhIHRlc3QgZmlsZQo="
+        }
+    },
+    "attachment_filename": "testFile.txt"
+}</pre>
+where 
+- email_address is the recipient address (required field)
+- message is the email message (required field)
+- attachment is a base64 encoded file (option field)
+- attachment_filename is the name of the file being uploaded (option field)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+The endpoint receives the payload and validates the contents. If everything 
+checks out, the file is decoded and saved to the server, then an email object is created and stored in the database. Then the email is
+queued. Once the Queue picks up the email, the email object gets updated as sent.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+GET /api/get-all-emails will return an array of all emails that have been created.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+GET /api/get-sent-emails will return an array of all emails that have been sent.
 
-## Learning Laravel
+##challenges
+Setting up the endpoints was pretty simple because that is definitely where
+Laravel excels. It is pretty much ready to go, api-wise, after it's running. 
+Setting up the endpoint logic was pretty straightforward, the 2 get endpoints 
+are nearly identical, with a little different eloquent searching. 
+This portion probably took about 30 minutes to do. 
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Setting up the endpoint that accepts a file and generates a queue email
+took me a bit longer. The projects I have worked on have pretty much had
+all the configuration for e-mails and Queues already set up. This was something 
+that I had to do a little bit of research. Accepting the file was not bad, because
+you just had to decode it and save it, but retrieving it also suffered from some new 
+project configuration research. I found that I needed to run the linking command and make a
+symlink but then that worked perfectly. I also needed to do some setup to get emails working. 
+I decided to go with Mailtrap because it was a new way of testing emails for me. It worked really well 
+I will probably go that route in the future if I can. 
+The queue email endpoint is definitely where most of the time went due to some research. I would probably guess that
+it took me about 2-3 hours.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Setting up the unit tests and factory didn't take too long (~30 min). 

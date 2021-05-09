@@ -17,5 +17,3 @@ use App\Http\Controllers\EmailController;
 Route::get('/', function () {
     return view('welcome');
 });
-//Route::post('/send-email', [EmailController::class,'queueEmail']);
-//Route::get('/getAllEmails', [EmailController::class, 'getAllEmails']);
